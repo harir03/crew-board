@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>crew-board</title>
+  <style>
+    :root {
+      --bg: #0B0C0B;
+      --surface: #161816;
+      --panel: #121412;
+      --text: #EEF1ED;
+      --muted: #8a9188;
+      --edge: #2a2e2a;
+      --accent: #C8F135;
+      --warn: #e8a838;
+      --bad: #e85d5d;
+      --ok: #25D366;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--edge);
+      background: var(--surface);
+    }
+    header .brand { font-weight: 700; letter-spacing: .04em; color: var(--accent); }
+    header .goal { color: var(--text); font-weight: 600; }
+    header .meta { color: var(--muted); font-size: 12px; }
+    .stats { display: flex; gap: 12px; color: var(--muted); font-size: 12px; }
+    .stats b { color: var(--accent); font-weight: 600; }
+    .shell {
+      display: grid;
+      grid-template-columns: 220px 1fr 220px;
+      min-height: calc(100vh - 49px);
+    }
+    aside, main {
+      border-right: 1px solid var(--edge);
+      padding: 12px;
+      overflow: auto;
+    }
+    aside:last-child { border-right: none; }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .group { margin-bottom: 16px; }
+    .agent {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px;
+      margin-bottom: 6px;
+      background: var(--panel);
+      border: 1px solid var(--edge);
+      border-radius: 6px;
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 4px; flex-shrink: 0;
+      background: var(--muted);
+    }
+    .dot.running { background: var(--accent); box-shadow: 0 0 8px #c8f13555; }
+    .dot.blocked, .dot.waiting_human, .dot.needs_attention { background: var(--warn); }
+    .dot.done { background: var(--ok); }
+    .agent.stale { border-color: var(--bad); }
+    .agent .name { font-weight: 600; }
+    .agent .role, .agent .task { color: var(--muted); font-size: 11px; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(160px, 1fr));
+      gap: 10px;
+      min-height: 100%;
+    }
+    .col {
+      background: var(--panel);
+      border: 1px solid var(--edge);
+      border-radius: 8px;
+      padding: 8px;
+      min-height: 280px;
+    }
+    .col h3 {
+      margin: 0 0 8px;
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    .col h3 span { color: var(--accent); }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--edge);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+    .card .t { font-weight: 600; margin-bottom: 6px; }
+    .card .s { color: var(--muted); font-size: 11px; }
+    .tag {
+      display: inline-block;
+      margin-top: 6px;
+      margin-right: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--edge);
+      font-size: 10px;
+      color: var(--accent);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .side-card {
+      background: var(--panel);
+      border: 1px solid var(--edge);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+    .side-card .k { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+    .side-card .v { margin-top: 4px; }
+    ul.np { margin: 0; padding-left: 16px; color: var(--muted); font-size: 12px; }
+    .stale { color: var(--bad); }
+    @media (max-width: 1100px) {
+      .shell { grid-template-columns: 200px 1fr; }
+      aside.right { display: none; }
+      .board { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand">CREW BOARD</div>
+      <div class="goal" id="goal">—</div>
+      <div class="meta">
+        <span id="project"></span>
+        · updated <span id="updated"></span>
+        <span id="stale" class="stale" hidden> · STALE</span>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div class="shell">
+    <aside class="left">
+      <div class="group">
+        <h2>Active</h2>
+        <div id="agents-active"></div>
+      </div>
+      <div class="group">
+        <h2>Idle / done</h2>
+        <div id="agents-idle"></div>
+      </div>
+    </aside>
+    <main>
+      <h2>Tasks</h2>
+      <div class="board" id="board"></div>
+    </main>
+    <aside class="right">
+      <h2>Next</h2>
+      <div class="side-card">
+        <div class="k">Next action</div>
+        <div class="v" id="next">—</div>
+      </div>
+      <h2>Not proven</h2>
+      <ul class="np" id="notproven"></ul>
+    </aside>
+  </div>
+  <script>
+    // Mission Control columns mapped from our ledger
+    const COLS = [
+      { key: "backlog", label: "inbox" },
+      { key: "todo", label: "assigned" },
+      { key: "in_progress", label: "in progress" },
+      { key: "waiting_human", label: "review" },
+      { key: "done", label: "done" },
+    ];
+    // blocked tasks sit under in progress visually but tagged
+    function columnFor(task) {
+      if (task.column === "blocked") return "in_progress";
+      return task.column;
+    }
+
+    function render(doc) {
+      document.getElementById("goal").textContent = doc.goal || "crew-board";
+      document.getElementById("project").textContent = doc.project || "";
+      document.getElementById("updated").textContent = (doc.updated_at || "").replace("T", " ").slice(0, 19);
+      document.getElementById("next").textContent = doc.next_action || "—";
+      const age = Date.now() - Date.parse(doc.updated_at || 0);
+      document.getElementById("stale").hidden = !(age > 30 * 60 * 1000);
+
+      const tasks = doc.tasks || [];
+      const counts = {
+        total: tasks.length,
+        in_progress: tasks.filter(t => t.column === "in_progress" || t.column === "blocked").length,
+        done: tasks.filter(t => t.column === "done").length,
+        waiting: tasks.filter(t => t.column === "waiting_human").length,
+      };
+      document.getElementById("stats").innerHTML =
+        `<div><b>${counts.total}</b> tasks</div>` +
+        `<div><b>${counts.in_progress}</b> active</div>` +
+        `<div><b>${counts.waiting}</b> review</div>` +
+        `<div><b>${counts.done}</b> done</div>`;
+
+      const busy = new Set(["running", "blocked", "waiting_human", "needs_attention"]);
+      const agents = doc.agents || [];
+      const active = agents.filter(a => busy.has(a.state));
+      const idle = agents.filter(a => !busy.has(a.state));
+
+      const agentHtml = (a) => `
+        <div class="agent ${a.lease_stale ? "stale" : ""}">
+          <div class="dot ${a.state || ""}"></div>
+          <div>
+            <div class="name">${a.name}</div>
+            <div class="role">${a.role || ""} · ${a.state || "?"}</div>
+            <div class="task">${a.task || "—"}${a.blocker ? " · " + a.blocker : ""}${a.lease_stale ? " · LEASE STALE" : ""}</div>
+          </div>
+        </div>`;
+      document.getElementById("agents-active").innerHTML = active.map(agentHtml).join("") || `<div class="role">none</div>`;
+      document.getElementById("agents-idle").innerHTML = idle.map(agentHtml).join("") || `<div class="role">none</div>`;
+
+      const byCol = Object.fromEntries(COLS.map(c => [c.key, []]));
+      for (const t of tasks) {
+        const k = columnFor(t);
+        (byCol[k] || (byCol[k] = [])).push(t);
+      }
+      document.getElementById("board").innerHTML = COLS.map(c => `
+        <div class="col">
+          <h3>${c.label} <span>${(byCol[c.key] || []).length}</span></h3>
+          ${(byCol[c.key] || []).map(t => `
+            <div class="card">
+              <div class="t">${t.title}</div>
+              <div class="s">${t.assignee || "unassigned"}${t.blocker ? " · " + t.blocker : ""}</div>
+              ${t.column === "blocked" ? '<span class="tag">blocked</span>' : ""}
+              ${t.proof ? `<span class="tag">proof</span> <span class="s">${t.proof}</span>` : ""}
+              ${t.link ? `<div class="s"><a href="${t.link}" target="_blank">open</a></div>` : ""}
+            </div>`).join("") || `<div class="s">empty</div>`}
+        </div>`).join("");
+
+      document.getElementById("notproven").innerHTML =
+        (doc.not_proven || []).map(x => `<li>${x}</li>`).join("") || `<li>none</li>`;
+    }
+
+    async function tick() {
+      const r = await fetch("/api/status");
+      render(await r.json());
+    }
+    tick();
+    setInterval(tick, 3000);
+  </script>
+</body>
+</html>

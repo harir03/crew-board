@@ -1,0 +1,245 @@
+{
+  "updated_at": "2026-09-08T20:34:43.713051+00:00",
+  "goal": "aios Windows v1 \u2014 HITL #6 then Atlas stack",
+  "project": "aios",
+  "states_allowed": [
+    "idle",
+    "running",
+    "needs_attention",
+    "blocked",
+    "waiting_human",
+    "done"
+  ],
+  "agents": [
+    {
+      "id": "dumie",
+      "name": "Dumie",
+      "role": "Lead / CoS",
+      "state": "running",
+      "task": "crew-board: control-plane protocol + GitHub push",
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:34:43.713051+00:00"
+    },
+    {
+      "id": "helm",
+      "name": "Helm",
+      "role": "Eng Mgr",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "relay",
+      "name": "Relay",
+      "role": "Product",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "forge",
+      "name": "Forge",
+      "role": "Platform",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "role": "Design",
+      "state": "idle",
+      "task": "Landing #7 done; craft residuals parked",
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "aegis",
+      "name": "Aegis",
+      "role": "Privacy",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "role": "Windows/Voice",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "quark",
+      "name": "Quark",
+      "role": "Local LLM",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "iris",
+      "name": "Iris",
+      "role": "Scout",
+      "state": "blocked",
+      "task": "Scout amber until gh green",
+      "blocker": "box gh unauthenticated",
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "prism",
+      "name": "Prism",
+      "role": "QA/E2E",
+      "state": "waiting_human",
+      "task": "PR #6 \u2014 hold for CI + Win32 E2E",
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "bolt",
+      "name": "Bolt",
+      "role": "DevEx/CI",
+      "state": "blocked",
+      "task": "HITL PR #6 \u2014 waiting Actions enable",
+      "blocker": "Actions disabled",
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "lint",
+      "name": "Lint",
+      "role": "Quality gate",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "vault",
+      "name": "Vault",
+      "role": "Memory",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "nexus",
+      "name": "Nexus",
+      "role": "Integrations",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "pulse",
+      "name": "Pulse",
+      "role": "Perf",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "role": "Docs",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "cipher",
+      "name": "Cipher",
+      "role": "Security",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "compass",
+      "name": "Compass",
+      "role": "Grok setup",
+      "state": "idle",
+      "task": null,
+      "blocker": null,
+      "proof": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t-hitl-6",
+      "title": "HITL PR #6 merge",
+      "column": "blocked",
+      "assignee": "bolt",
+      "blocker": "GitHub Actions disabled on harir03/aios; Win32 E2E pending",
+      "link": "https://github.com/harir03/aios/pull/6",
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "t-landing-7",
+      "title": "Landing Illoca polish",
+      "column": "done",
+      "assignee": "nova",
+      "blocker": null,
+      "link": "https://github.com/harir03/aios/pull/7",
+      "updated_at": "2026-09-08T20:13:11.139736+00:00",
+      "proof": "merged main c04e066"
+    },
+    {
+      "id": "t-gh-box",
+      "title": "Box gh auth for Iris scout",
+      "column": "blocked",
+      "assignee": "dumie",
+      "blocker": "GitHub temporary restriction + device code timeout; user skipped widget",
+      "link": null,
+      "updated_at": "2026-09-08T20:13:11.139736+00:00"
+    },
+    {
+      "id": "t-crew-board",
+      "title": "Crew board (C layout + D colors)",
+      "column": "in_progress",
+      "assignee": "dumie",
+      "blocker": null,
+      "link": null,
+      "updated_at": "2026-09-08T20:19:19.568789+00:00"
+    }
+  ],
+  "not_proven": [
+    "Live Win32 Path1/Path2 on registered PC",
+    "CI check_runs green on PR #6",
+    "Box gh authenticated"
+  ],
+  "next_action": "Push repo + wire crew to PROTOCOL cadence (lifecycle + 10m heartbeat)",
+  "control_plane": {
+    "heartbeat_sec": 600,
+    "lease_stale_sec": 900,
+    "rule": "lifecycle immediate; heartbeat 5-15m while running; idle silent"
+  }
+}
